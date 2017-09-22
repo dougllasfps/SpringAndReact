@@ -23,11 +23,6 @@ public class PessoaController {
     @ResponseBody
     @RequestMapping("/")
     public ResponseEntity<List<Pessoa>> all(){
-        Pessoa pessoa = new Pessoa();
-        pessoa.setCpf("03124062310");
-        pessoa.setNome("Dougllas");
-        pessoa.setNascimento(LocalDate.of(1988,6,8));
-        repository.save(pessoa);
         return new ResponseEntity<List<Pessoa>>(repository.findAll(), HttpStatus.OK);
     }
 
