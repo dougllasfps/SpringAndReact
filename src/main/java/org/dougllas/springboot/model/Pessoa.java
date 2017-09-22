@@ -1,9 +1,10 @@
 package org.dougllas.springboot.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.dougllas.springboot.serializer.LocalDateDeserializer;
-import org.dougllas.springboot.serializer.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 import javax.persistence.*;
@@ -25,6 +26,7 @@ public class Pessoa implements Serializable{
     @Convert(converter = Jsr310JpaConverters.LocalDateConverter.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate nascimento;
 
     @Column
