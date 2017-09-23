@@ -2,3 +2,4 @@
 /target
 *.iml
 derby.log
+/src/main/resources/scripts/node_modules
