@@ -1,10 +1,26 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import './css/pure-min.css';
 import './css/side-menu.css';
+import $ from 'jquery';
 
 class App extends Component {
+
+  constructor(){
+    super();
+    this.state = {lista : []};
+  }
+  
+  componentWillMount(){
+    $.ajax({
+      url : 'http://localhost:8080/pessoas/',
+      dataType : 'json',
+      success: function(response){
+        this.setState({lista: response}); 
+      }.bind(this)
+    });
+  }
+
   render() {
     return (
       <div id="layout">
@@ -60,14 +76,22 @@ class App extends Component {
             <thead>
               <tr>
                 <th>Nome</th>
-                <th>email</th>
+                <th>Nascimento</th>
+                <th>CPF</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Alberto</td>                
-                <td>alberto.souza@caelum.com.br</td>                
-              </tr>
+              {
+                this.state.lista.map(function(pessoa){
+                    return (
+                        <tr key={pessoa.id}>
+                            <td>{pessoa.nome}</td>
+                            <td>{pessoa.nascimento}</td>
+                            <td>{pessoa.cpf}</td>
+                        </tr>
+                    );
+                })
+              }
             </tbody>
           </table> 
         </div>             
