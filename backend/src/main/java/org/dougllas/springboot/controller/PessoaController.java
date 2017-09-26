@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/pessoas")
@@ -30,8 +32,11 @@ public class PessoaController {
     }
 
     @RequestMapping(value = "/pessoa",method = RequestMethod.POST)
-    public ResponseEntity<String> save(@RequestBody(required = true) Pessoa pessoa){
+    @ResponseBody
+    public ResponseEntity<Pessoa> save(@RequestBody(required = true) Pessoa pessoa){
         repository.save(pessoa);
-        return new ResponseEntity<String>("Salvo com sucesso", HttpStatus.OK);
+        Map<String, String> result = new HashMap<String, String>();
+        result.put("message", "Salvo com sucesso.");
+        return new ResponseEntity<Pessoa>(pessoa, HttpStatus.OK);
     }
 }
