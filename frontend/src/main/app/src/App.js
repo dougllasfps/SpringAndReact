@@ -8,8 +8,34 @@ class App extends Component {
 
   constructor(){
     super();
-    this.state = {lista : []};
+    this.state = {lista : [], nome : '', nascimento: '', cpf: ''};
     this.save = this.save.bind(this);
+    this.setNome = this.setNome.bind(this);
+    this.setNascimento = this.setNascimento.bind(this);
+    this.setCpf = this.setCpf.bind(this);
+    this.carregaLista = this.carregaLista.bind(this);
+  }
+
+  setNome(event){
+    this.setState({nome: event.target.value});
+  }
+
+  setNascimento(event){
+    this.setState({nascimento: event.target.value});
+  }
+
+  setCpf(event){
+    this.setState({cpf: event.target.value});
+  }
+
+  carregaLista(){
+    $.ajax({
+      url : 'http://localhost:8080/pessoas/',
+      dataType : 'json',
+      success: function(response){
+        this.setState({lista: response}); 
+      }.bind(this)
+    });
   }
 
   save(event){
@@ -19,26 +45,21 @@ class App extends Component {
       contentType : 'application/json',
       dataType: 'json',
       type: 'post',
-      data: JSON.stringify({nome : 'Wilson', nascimento: '01/01/2001'}),
+      data: JSON.stringify({nome : this.state.nome, nascimento: this.state.nascimento, cpf: this.state.cpf}),
       success: function(response){
-          console.log('sucesso');
           console.log(response);
-      },
+          console.log(response.statusCode);
+          this.carregaLista();
+      }.bind(this),
       error: function(response){
-        console.log('erro');
-        console.log(response);
+        console.log(response.responseText);
       }  
     });
+    
   }
   
   componentWillMount(){
-    $.ajax({
-      url : 'http://localhost:8080/pessoas/',
-      dataType : 'json',
-      success: function(response){
-        this.setState({lista: response}); 
-      }.bind(this)
-    });
+    this.carregaLista();
   }
 
   render() {
@@ -74,15 +95,15 @@ class App extends Component {
               <form className="pure-form pure-form-aligned" onSubmit={this.save} method="post">
                 <div className="pure-control-group">
                   <label htmlFor="nome">Nome</label> 
-                  <input id="nome" type="text" name="nome" value=""  />                  
+                  <input id="nome" type="text" name="nome" value={this.state.nome} onChange={this.setNome}  />                  
                 </div>
                 <div className="pure-control-group">
-                  <label htmlFor="email">Email</label> 
-                  <input id="email" type="email" name="email" value=""  />                  
+                  <label htmlFor="email">Nascimento</label> 
+                  <input id="email" type="text" name="email" value={this.state.nascimento} onChange={this.setNascimento}   />                  
                 </div>
                 <div className="pure-control-group">
                   <label htmlFor="senha">Senha</label> 
-                  <input id="senha" type="password" name="senha"  />                                      
+                  <input id="senha" type="text" name="senha" value={this.state.cpf} onChange={this.setCpf}  />                                      
                 </div>
                 <div className="pure-control-group">                                  
                   <label></label> 

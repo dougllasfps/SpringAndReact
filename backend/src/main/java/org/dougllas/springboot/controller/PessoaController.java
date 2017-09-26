@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,10 +35,11 @@ public class PessoaController {
 
     @RequestMapping(value = "/pessoa",method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<Pessoa> save(@RequestBody(required = true) Pessoa pessoa){
+    public ResponseEntity save(@RequestBody(required = true) @Valid Pessoa pessoa, BindingResult validationResult){
+        if(validationResult.hasErrors()){
+            return new ResponseEntity<List>(validationResult.getAllErrors(), HttpStatus.BAD_REQUEST);
+        }
         repository.save(pessoa);
-        Map<String, String> result = new HashMap<String, String>();
-        result.put("message", "Salvo com sucesso.");
-        return new ResponseEntity<Pessoa>(pessoa, HttpStatus.OK);
+        return new ResponseEntity<Pessoa>(pessoa, HttpStatus.CREATED);
     }
 }

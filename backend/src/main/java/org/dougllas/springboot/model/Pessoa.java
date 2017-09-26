@@ -5,9 +5,11 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -20,6 +22,8 @@ public class Pessoa implements Serializable{
     private Long id;
 
     @Column
+    @NotNull
+    @NotEmpty
     private String nome;
 
     @Column
@@ -27,9 +31,12 @@ public class Pessoa implements Serializable{
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonFormat(pattern = "dd/MM/yyyy")
+    @NotNull
     private LocalDate nascimento;
 
     @Column
+    @NotNull
+    @NotEmpty
     private String cpf;
 
     public Long getId() {
